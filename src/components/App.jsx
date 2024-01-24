@@ -12,6 +12,24 @@ export default class App extends Component {
     filter: '',
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    try {
+      const parsedContacts = JSON.parse(contacts);
+      if (parsedContacts) {
+        this.setState({ contacts: parsedContacts });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   findContact = name => {
     const { contacts } = this.state;
     const normalizedName = name.toLowerCase();
